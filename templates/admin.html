@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - CEA Cursos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/principal.css">
+</head>
+<body>
+    <!-- Fondo animado -->
+    <div class="animated-background"></div>
+    
+    <!-- Partículas flotantes -->
+    <div class="particles" id="particles"></div>
+    
+    <!-- Contenido principal -->
+    <div class="container">
+        <!-- Encabezado -->
+        <header class="header">
+            <div class="logo-container">
+                <img src="/static/img/Logo.png" alt="CEA Cursos" class="logo">
+                <div class="brand-text">
+                    <h1>CEA CURSOS</h1>
+                    <p>Panel de Administración</p>
+                </div>
+            </div>
+            
+            <div class="user-menu">
+                <img src="img/user-avatar.jpg" alt="Usuario" class="user-avatar">
+            </div>
+        </header>
+        
+        <!-- Grid de tarjetas -->
+        <div class="dashboard-grid">
+            <div class="dashboard-card" style="animation-delay: 0.1s">
+                <div class="card-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3 class="card-title">Alumnos</h3>
+                <p class="card-description">Administra los registros de todos los estudiantes matriculados en los cursos.</p>
+                <a href="alumn-admin.html" class="card-action">Acceder <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <div class="dashboard-card" style="animation-delay: 0.2s">
+                <div class="card-icon">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                </div>
+                <h3 class="card-title">Profesores</h3>
+                <p class="card-description">Gestiona la información de los docentes y sus asignaciones a los cursos.</p>
+                <a href="profes-admin.html" class="card-action">Ver detalles <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <div class="dashboard-card" style="animation-delay: 0.3s">
+                <div class="card-icon">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <h3 class="card-title">Cursos</h3>
+                <p class="card-description">Explora y administra todos los cursos disponibles en el catálogo.</p>
+                <a href="#" class="card-action">Explorar <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <div class="dashboard-card" style="animation-delay: 0.4s">
+                <div class="card-icon">
+                    <i class="fas fa-calculator"></i>
+                </div>
+                <h3 class="card-title">Contables</h3>
+                <p class="card-description">Control financiero y gestión de pagos de alumnos y profesores.</p>
+                <a href="#" class="card-action">Ir a contabilidad <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <div class="dashboard-card" style="animation-delay: 0.5s">
+                <div class="card-icon">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+                <h3 class="card-title">Informes</h3>
+                <p class="card-description">Genera reportes y visualiza métricas importantes del sistema.</p>
+                <a href="#" class="card-action">Generar informe <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <div class="dashboard-card" style="animation-delay: 0.6s">
+                <div class="card-icon">
+                    <i class="fas fa-receipt"></i>
+                </div>
+                <h3 class="card-title">Recibos</h3>
+                <p class="card-description">Emite y administra comprobantes de pago para los alumnos.</p>
+                <a href="#" class="card-action">Ver recibos <i class="fas fa-arrow-right"></i></a>
+            </div>
+
+            <div class="dashboard-card" style="animation-delay: 0.6s">
+                <div class="card-icon">
+                    <i class="fas fa-receipt"></i>
+                </div>
+                <h3 class="card-title">Usuarios</h3>
+                <p class="card-description">Gestiona la información .</p>
+                <a href="usuarios.html" class="card-action">Ver Usuarios <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Botón de cerrar sesión flotante -->
+    <button class="logout-btn" id="logoutBtn">
+        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+    </button>
+    <script src="/static/js/principal.js"></script>
+</body>
+</html>
