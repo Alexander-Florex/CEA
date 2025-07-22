@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabla de Profes - CEA Cursos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/usuarios.css">
+</head>
+<body>
+    <!-- Fondo animado -->
+    <div class="animated-background"></div>
+    
+    <!-- Partículas flotantes -->
+    <div class="particles" id="particles"></div>
+    
+    <!-- Contenido principal -->
+    <div class="container">
+        <!-- Encabezado -->
+        <header class="header">
+            <div class="logo-container">
+                <img src="/static/img/Logo.png" alt="CEA Cursos" class="logo">
+                <div class="brand-text">
+                    <h1>CEA CURSOS</h1>
+                    <p>Administración de Profesores</p>
+                </div>
+            </div>
+            
+            <div class="user-menu">
+                <img src="img/user-avatar.jpg" alt="Usuario" class="user-avatar">
+            </div>
+        </header>
+        
+        <!-- Contenedor de la tabla -->
+        <div class="table-container">
+            <!-- Barra de herramientas -->
+            <div class="toolbar">
+                <h2 class="page-title">Tabla de Profesores</h2>
+                
+                <div class="actions">
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Buscar..." id="searchInput">
+                    </div>
+                    
+                    <button class="btn btn-primary" id="newTeacherBtn">
+                        <i class="fas fa-plus"></i> Nuevo Profesor
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Tabla -->
+            <div class="table-wrapper">
+                <table id="teachersTable">
+                    <thead>
+                        <tr>
+                            <th>ID <i class="fas fa-sort"></i></th>
+                            <th>Nombre <i class="fas fa-sort"></i></th>
+                            <th>Apellido <i class="fas fa-sort"></i></th>
+                            <th>DNI <i class="fas fa-sort"></i></th>
+                            <th>Teléfono <i class="fas fa-sort"></i></th>
+                            <th>Email <i class="fas fa-sort"></i></th>
+                            <th>Especialidad <i class="fas fa-sort"></i></th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Los datos se cargarán dinámicamente con JavaScript -->
+                        <tr class="empty-row">
+                            <td colspan="8" class="empty-message">No hay profesores registrados</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Botón de volver a inicio flotante -->
+    <button class="logout-btn" id="logoutBtn">
+        <i class="fas fa-sign-out-alt"></i> Volver
+    </button>
+    
+    <!-- Modal para nuevo profesor -->
+    <div class="modal" id="teacherModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Nuevo Profesor</h3>
+                <button class="close-btn" id="closeModalBtn">&times;</button>
+            </div>
+            
+            <form id="teacherForm">
+                <input type="hidden" id="teacherId">
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">Nombre*</label>
+                        <input type="text" id="firstName" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="lastName">Apellido*</label>
+                        <input type="text" id="lastName" class="form-control" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="dni">DNI*</label>
+                        <input type="text" id="dni" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Teléfono*</label>
+                        <input type="tel" id="phone" class="form-control" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email*</label>
+                    <input type="email" id="email" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="specialty">Especialidad*</label>
+                    <input type="text" id="specialty" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="address">Dirección</label>
+                    <input type="text" id="address" class="form-control">
+                </div>
+                
+                <div class="form-group">
+                    <label for="notes">Observaciones</label>
+                    <textarea id="notes" class="form-control" rows="3"></textarea>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-cancel" id="cancelBtn">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+<script>
+// Datos de ejemplo para profesores
+let teachers = [
+    {
+        id: 1,
+        firstName: "Ana",
+        lastName: "Martínez",
+        dni: "25123456",
+        phone: "3511234567",
+        email: "ana.martinez@example.com",
+        specialty: "Matemáticas",
+        address: "Av. Siempre Viva 123",
+        notes: "Profesora titular"
+    },
+    {
+        id: 2,
+        firstName: "Carlos",
+        lastName: "Gómez",
+        dni: "23987654",
+        phone: "3519876543",
+        email: "carlos.gomez@example.com",
+        specialty: "Literatura",
+        address: "Calle Falsa 123",
+        notes: "Jefe de departamento"
+    },
+    {
+        id: 3,
+        firstName: "Lucía",
+        lastName: "Fernández",
+        dni: "28901234",
+        phone: "3516789012",
+        email: "lucia.fernandez@example.com",
+        specialty: "Ciencias Naturales",
+        address: "Belgrano 456",
+        notes: "Profesora suplente"
+    }
+];
+
+// Variables globales
+let currentTeacherId = null;
+
+// Inicialización
+document.addEventListener('DOMContentLoaded', function() {
+    // Generar partículas
+    createParticles();
+    
+    // Cargar datos iniciales
+    renderTable();
+    
+    // Configurar eventos
+    setupEventListeners();
+});
+
+// Crear partículas flotantes
+function createParticles() {
+    const particlesContainer = document.getElementById('particles');
+    const particleCount = 30;
+    
+    for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        // Tamaño aleatorio entre 2px y 6px
+        const size = Math.random() * 4 + 2;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        
+        // Posición inicial aleatoria
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.top = `${Math.random() * 100}%`;
+        
+        // Duración de animación aleatoria
+        const duration = Math.random() * 20 + 10;
+        particle.style.animationDuration = `${duration}s`;
+        
+        // Retraso aleatorio
+        particle.style.animationDelay = `${Math.random() * 5}s`;
+        
+        particlesContainer.appendChild(particle);
+    }
+}
+
+// Configurar event listeners
+function setupEventListeners() {
+    // Botón nuevo profesor
+    document.getElementById('newTeacherBtn').addEventListener('click', showAddTeacherModal);
+    
+    // Botón cerrar modal
+    document.getElementById('closeModalBtn').addEventListener('click', hideModal);
+    document.getElementById('cancelBtn').addEventListener('click', hideModal);
+    
+    // Formulario profesor
+    document.getElementById('teacherForm').addEventListener('submit', handleTeacherFormSubmit);
+    
+    // Búsqueda
+    document.getElementById('searchInput').addEventListener('input', renderTable);
+    
+    // Botón volver
+    logoutBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                const icon = logoutBtn.querySelector('i');
+                const originalText = logoutBtn.textContent;
+                
+                icon.classList.remove('fa-sign-out-alt');
+                icon.classList.add('fa-spinner', 'fa-spin');
+                logoutBtn.textContent = ' Volviendo a inicio...';
+                
+                setTimeout(() => {
+                    window.location.href = 'admin.html';
+                }, 1500);
+            });
+}
+
+// Mostrar modal para agregar profesor
+function showAddTeacherModal() {
+    document.getElementById('modalTitle').textContent = 'Nuevo Profesor';
+    document.getElementById('teacherId').value = '';
+    document.getElementById('teacherForm').reset();
+    
+    // Generar nuevo ID
+    const newId = teachers.length > 0 ? Math.max(...teachers.map(t => t.id)) + 1 : 1;
+    document.getElementById('teacherId').value = newId;
+    
+    showModal('teacherModal');
+}
+
+// Mostrar modal para editar profesor
+function showEditTeacherModal(teacherId) {
+    const teacher = teachers.find(t => t.id == teacherId);
+    if (!teacher) return;
+    
+    document.getElementById('modalTitle').textContent = 'Editar Profesor';
+    document.getElementById('teacherId').value = teacher.id;
+    document.getElementById('firstName').value = teacher.firstName;
+    document.getElementById('lastName').value = teacher.lastName;
+    document.getElementById('dni').value = teacher.dni;
+    document.getElementById('phone').value = teacher.phone;
+    document.getElementById('email').value = teacher.email;
+    document.getElementById('specialty').value = teacher.specialty;
+    document.getElementById('address').value = teacher.address || '';
+    document.getElementById('notes').value = teacher.notes || '';
+    
+    showModal('teacherModal');
+}
+
+// Mostrar modal
+function showModal(modalId) {
+    const modal = document.getElementById(modalId);
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+// Ocultar modal
+function hideModal() {
+    document.querySelectorAll('.modal').forEach(modal => {
+        modal.classList.remove('active');
+    });
+    document.body.style.overflow = '';
+}
+
+// Manejar envío del formulario de profesor
+function handleTeacherFormSubmit(e) {
+    e.preventDefault();
+    
+    const teacherId = parseInt(document.getElementById('teacherId').value);
+    const isNew = !teachers.some(t => t.id === teacherId);
+    
+    const teacherData = {
+        id: teacherId,
+        firstName: document.getElementById('firstName').value.trim(),
+        lastName: document.getElementById('lastName').value.trim(),
+        dni: document.getElementById('dni').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        specialty: document.getElementById('specialty').value.trim(),
+        address: document.getElementById('address').value.trim(),
+        notes: document.getElementById('notes').value.trim()
+    };
+    
+    if (isNew) {
+        // Agregar nuevo profesor
+        teachers.push(teacherData);
+    } else {
+        // Actualizar profesor existente
+        const index = teachers.findIndex(t => t.id === teacherId);
+        if (index !== -1) {
+            teachers[index] = teacherData;
+        }
+    }
+    
+    // Actualizar la tabla
+    renderTable();
+    
+    // Ocultar modal y mostrar notificación
+    hideModal();
+    showNotification(isNew ? 'Profesor agregado correctamente' : 'Datos del profesor actualizados', 'success');
+}
+
+// Eliminar profesor
+function deleteTeacher(teacherId) {
+    if (!confirm('¿Estás seguro de que deseas eliminar este profesor?')) {
+        return;
+    }
+    
+    const index = teachers.findIndex(t => t.id == teacherId);
+    if (index !== -1) {
+        teachers.splice(index, 1);
+        renderTable();
+        showNotification('Profesor eliminado correctamente', 'success');
+    }
+}
+
+// Renderizar la tabla de profesores
+function renderTable() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    const filteredTeachers = teachers.filter(teacher => {
+        return (
+            teacher.firstName.toLowerCase().includes(searchTerm) ||
+            teacher.lastName.toLowerCase().includes(searchTerm) ||
+            teacher.dni.toLowerCase().includes(searchTerm) ||
+            teacher.email.toLowerCase().includes(searchTerm) ||
+            teacher.specialty.toLowerCase().includes(searchTerm)
+        );
+    });
+    
+    const tbody = document.querySelector('#teachersTable tbody');
+    tbody.innerHTML = '';
+    
+    if (filteredTeachers.length === 0) {
+        tbody.innerHTML = '<tr class="empty-row"><td colspan="8" class="empty-message">No se encontraron profesores</td></tr>';
+        return;
+    }
+    
+    filteredTeachers.forEach(teacher => {
+        const row = document.createElement('tr');
+        
+        row.innerHTML = `
+            <td>${teacher.id}</td>
+            <td>${teacher.firstName}</td>
+            <td>${teacher.lastName}</td>
+            <td>${teacher.dni}</td>
+            <td>${teacher.phone}</td>
+            <td>${teacher.email}</td>
+            <td>${teacher.specialty}</td>
+            <td class="actions-cell">
+                <button class="btn-icon btn-edit" data-id="${teacher.id}" title="Editar">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn-icon btn-delete" data-id="${teacher.id}" title="Eliminar">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
+        `;
+        
+        tbody.appendChild(row);
+    });
+    
+    // Configurar eventos para los botones de acción
+    document.querySelectorAll('.btn-edit').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const teacherId = this.getAttribute('data-id');
+            showEditTeacherModal(teacherId);
+        });
+    });
+    
+    document.querySelectorAll('.btn-delete').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const teacherId = this.getAttribute('data-id');
+            deleteTeacher(teacherId);
+        });
+    });
+}
+
+// Mostrar notificación
+function showNotification(message, type) {
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.classList.add('fade-out');
+        setTimeout(() => notification.remove(), 500);
+    }, 3000);
+}
+
+// Agregar estilos para las notificaciones
+const notificationStyles = document.createElement('style');
+notificationStyles.textContent = `
+.notification {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px 25px;
+    border-radius: 5px;
+    color: white;
+    font-weight: 500;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    animation: slideIn 0.3s ease;
+}
+
+.notification-success {
+    background-color: #4cc9f0;
+}
+
+.notification-error {
+    background-color: #ef233c;
+}
+
+.fade-out {
+    animation: fadeOut 0.5s ease;
+    opacity: 0;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(-50%) translateY(100px); }
+    to { transform: translateX(-50%) translateY(0); }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+/* Estilos para filas en formulario */
+.form-row {
+    display: flex;
+    gap: 15px;
+}
+
+.form-row .form-group {
+    flex: 1;
+}
+`;
+document.head.appendChild(notificationStyles);
+</script>
+</body>
+</html>
